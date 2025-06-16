@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulir Pemesanan - Raysa Es Kristal</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="order-page-container">
+      <a href="index.html" class="back-button">&larr; Kembali ke Beranda</a>
+
+      <div class="form-wrapper">
+        <h1 class="form-title">Formulir Pemesanan Cepat</h1>
+        <p class="form-subtitle">
+          Isi data di bawah ini. Pesanan Anda akan kami rangkum untuk dikirimkan
+          via WhatsApp.
+        </p>
+        <form id="order-form">
+          <div class="form-group">
+            <label for="name">Nama Anda</label>
+            <input
+              type="text"
+              id="name"
+              placeholder="Masukkan nama lengkap Anda"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="phone">Nomor WhatsApp</label>
+            <input
+              type="text"
+              id="phone"
+              placeholder="Contoh: 628123456789"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="address">Alamat Pengiriman</label>
+            <textarea
+              id="address"
+              rows="3"
+              placeholder="Masukkan alamat lengkap beserta patokan"
+              required
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="quantity">Jumlah Pesanan (karung/kg)</label>
+            <input
+              type="number"
+              id="quantity"
+              placeholder="Contoh: 5"
+              required
+            />
+          </div>
+          <button type="submit" class="btn-primary">
+            Lanjutkan ke WhatsApp
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

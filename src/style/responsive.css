@@ -1,0 +1,42 @@
+/* src/style/responsive.css */
+
+@media (max-width: 768px) {
+  /* Sembunyikan navigasi & tombol desktop */
+  .desktop-nav,
+  .desktop-cta {
+    display: none;
+  }
+
+  /* Tampilkan hamburger menu */
+  .hamburger-menu {
+    display: flex;
+  }
+
+  /* HAPUS .mobile-nav.active { display: flex; } karena sudah diatur oleh class active di header.css */
+
+  .about-layout {
+    flex-direction: column; /* Mengubah layout menjadi vertikal di mobile */
+    text-align: center;
+  }
+
+  .logo-image {
+    height: 40px; /* Sedikit kecilkan logo di mobile */
+  }
+
+  .nav-container {
+    height: 70px; /* Sedikit pendekkan header di mobile */
+  }
+
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+}

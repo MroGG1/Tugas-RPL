@@ -1,0 +1,129 @@
+.footer {
+  background: #333;
+  color: white;
+  padding: 4rem 0 1.5rem; /* Beri padding atas lebih besar */
+}
+
+.footer-content {
+  display: grid;
+  /* Buat grid dengan 4 kolom */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.footer-section h4 {
+  margin-bottom: 1.5rem;
+  color: #007bff;
+  font-size: 1.1rem;
+}
+
+.footer-section ul {
+  list-style: none;
+}
+
+.footer-section ul li {
+  margin-bottom: 0.8rem;
+}
+
+.footer-section ul li a,
+.footer-section ul li {
+  /* Terapkan juga untuk teks non-link */
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+  color: #007bff;
+}
+
+/* Atur agar kolom peta memakan 2 kolom dari grid */
+.footer-map-container {
+  grid-column: span 2;
+}
+
+#map-footer {
+  width: 100%;
+  height: 250px; /* Tinggi peta di footer */
+  border-radius: 8px;
+  z-index: 1; /* Pastikan peta tidak tertimpa */
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid #555;
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+/* Penyesuaian untuk Mobile */
+@media (max-width: 768px) {
+  .footer-content {
+    /* Kembali ke 1 kolom di mobile */
+    grid-template-columns: 1fr;
+  }
+
+  /* Reset kolom peta agar tidak span di mobile */
+  .footer-map-container {
+    grid-column: span 1;
+  }
+}
+
+/*
+* Style untuk Ikon Sosial Media di Footer
+*/
+.social-icons {
+  display: flex; /* Membuat ikon berjajar horizontal */
+  align-items: center;
+  gap: 1.25rem; /* Memberi jarak antar ikon */
+  margin-top: 1rem; /* Memberi jarak dari item di atasnya */
+}
+
+.social-icons a {
+  display: inline-block;
+}
+
+.social-icons svg {
+  width: 24px; /* Atur ukuran ikon */
+  height: 24px;
+  fill: #ccc; /* Atur warna ikon agar senada dengan teks footer */
+  transition: fill 0.3s ease, transform 0.3s ease; /* Transisi untuk hover */
+}
+
+/* Efek saat kursor mouse di atas ikon */
+.social-icons a:hover svg {
+  fill: #ffffff; /* Ubah warna ikon menjadi putih saat di-hover */
+  transform: scale(1.1); /* Sedikit memperbesar ikon */
+}
+
+.contact-item {
+  margin-bottom: 1rem; /* Jarak antar item kontak */
+}
+
+.contact-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #999;
+  margin-bottom: 0.5rem;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* Jarak antara ikon dan teks */
+  text-decoration: none;
+  color: #ccc;
+  transition: color 0.3s ease;
+}
+
+.contact-link:hover {
+  color: #ffffff; /* Warna teks saat hover */
+}
+
+.contact-link svg {
+  width: 20px; /* Ukuran ikon yang baru */
+  height: 20px;
+  fill: currentColor; /* Membuat warna ikon mengikuti warna teks (color) */
+}

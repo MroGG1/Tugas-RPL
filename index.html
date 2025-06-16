@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Raysa Es Kristal - Higienis & Tahan Lama</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+  </head>
+  <body>
+    <header class="header">
+      <div class="nav-container">
+        <div class="logo">
+          <img
+            src="./src/assets/images/logo.png"
+            alt="Logo Raysa Es Kristal"
+            class="logo-image"
+          />
+        </div>
+        <nav class="desktop-nav">
+          <ul class="nav-menu">
+            <li><a href="#home">Beranda</a></li>
+            <li><a href="#keunggulan">Keunggulan</a></li>
+            <li><a href="#harga">Harga</a></li>
+            <li><a href="#produk">Galeri</a></li>
+            <li><a href="#tentang">Tentang Kami</a></li>
+          </ul>
+        </nav>
+        <a href="order.html" class="cta-button desktop-cta">Pesan Sekarang</a>
+        <button class="hamburger-menu" aria-label="Toggle navigation">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
+
+      <div class="mobile-nav">
+        <ul class="mobile-nav-links">
+          <li><a href="#home">Beranda</a></li>
+          <li><a href="#keunggulan">Keunggulan</a></li>
+          <li><a href="#harga">Harga</a></li>
+          <li><a href="#produk">Galeri</a></li>
+          <li><a href="#tentang">Tentang Kami</a></li>
+        </ul>
+        <div class="mobile-nav-cta">
+          <a href="order.html" class="btn-primary">Pesan Sekarang</a>
+        </div>
+      </div>
+      <div class="nav-overlay"></div>
+    </header>
+
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <h1>Es Kristal Higienis<br />Dinginnya Tahan Lama</h1>
+        <p>
+          Diproses dari sumber air murni dengan teknologi modern untuk menjamin
+          kejernihan dan kebersihan. Pesan sekarang untuk kebutuhan harian,
+          bisnis, atau acara spesial Anda.
+        </p>
+        <div class="hero-buttons">
+          <a href="#harga" class="btn-primary">Lihat Harga & Produk</a>
+          <a href="https://wa.me/6281234567890" class="btn-secondary"
+            >Pesan via WhatsApp</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="keunggulan">
+      <div class="container" data-aos="fade-up">
+        <h2 class="section-title">Kenapa Memilih Raysa Es Kristal?</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Higienis Terjamin</h3>
+            <p>
+              Diproses menggunakan teknologi filterisasi modern dari sumber air
+              pilihan, memastikan es bebas dari kuman dan aman dikonsumsi.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Lebih Tahan Lama</h3>
+            <p>
+              Es kami memiliki kepadatan yang maksimal sehingga tidak cepat
+              mencair, menjaga minuman Anda tetap dingin lebih lama.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Jernih & Tanpa Bau</h3>
+            <p>
+              Kualitas air dan proses produksi terstandar menghasilkan es yang
+              jernih sempurna dan tidak mengubah rasa asli minuman Anda.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="harga" style="background-color: #f8f9fa">
+      <div class="container" data-aos="fade-up">
+        <h2 class="section-title">Produk & Harga</h2>
+        <p
+          style="text-align: center; max-width: 800px; margin: -2rem auto 3rem"
+        >
+          Kami menyediakan es kristal dalam berbagai kemasan untuk memenuhi
+          segala kebutuhan Anda. Harga transparan dan kompetitif.
+        </p>
+
+        <div class="pricing-grid">
+          <div class="card pricing-card">
+            <h3>Paket Harian</h3>
+            <div class="price">
+              Rp 15.000<span class="per-item">/karung</span>
+            </div>
+            <p>Es Kristal Higienis kemasan 10 kg.</p>
+            <ul>
+              <li>✔ Cocok untuk konsumsi rumah tangga</li>
+              <li>✔ Jernih dan tahan lama</li>
+              <li>✔ Diantar sampai tujuan</li>
+            </ul>
+            <a href="order.html" class="btn-primary">Pesan Sekarang</a>
+          </div>
+
+          <div class="card pricing-card featured">
+            <div class="featured-badge">Paling Laris</div>
+            <h3>Paket Usaha</h3>
+            <div class="price">
+              Rp 65.000<span class="per-item">/5 karung</span>
+            </div>
+            <p>Pasokan es kristal untuk pedagang minuman.</p>
+            <ul>
+              <li>✔ Harga lebih hemat</li>
+              <li>✔ Pengiriman rutin terjadwal</li>
+              <li>✔ Kualitas terjamin untuk bisnis</li>
+            </ul>
+            <a href="order.html" class="btn-primary">Pesan Sekarang</a>
+          </div>
+
+          <div class="card pricing-card">
+            <h3>Paket Acara</h3>
+            <div class="price">Hubungi Kami</div>
+            <p>Kebutuhan es untuk acara spesial Anda.</p>
+            <ul>
+              <li>✔ Fleksibel sesuai kebutuhan acara</li>
+              <li>✔ Pengiriman tepat waktu</li>
+              <li>✔ Konsultasi gratis</li>
+            </ul>
+            <a href="#kontak" class="btn-primary">Hubungi Kami</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section gallery" id="produk" data-aos="fade-up">
+      <div class="container">
+        <h2 class="section-title">Galeri Produksi Kami</h2>
+        <p
+          style="text-align: center; max-width: 800px; margin: -2rem auto 3rem"
+        >
+          Lihat lebih dekat proses produksi kami yang higienis dan produk es
+          kristal berkualitas tinggi yang kami hasilkan setiap hari.
+        </p>
+
+        <div class="scroller-container">
+          <div class="scroller-track">
+            <div class="gallery-item">
+              <img
+                src="./src/assets/images/gambar/es3.jpeg"
+                alt="Mesin produksi es kristal modern"
+              />
+            </div>
+            <div class="gallery-item">
+              <img
+                src="./src/assets/images/gallery-2.jpg"
+                alt="Es kristal dalam kemasan siap kirim"
+              />
+            </div>
+            <div class="gallery-item">
+              <img
+                src="./src/assets/images/gallery-3.jpg"
+                alt="Hasil es kristal yang jernih dan bersih"
+              />
+            </div>
+            <div class="gallery-item">
+              <img
+                src="./src/assets/images/gallery-4.jpg"
+                alt="Proses pengemasan es kristal yang higienis"
+              />
+            </div>
+
+            <div class="gallery-item">
+              <img
+                src="./src/assets/images/gallery-1.jpg"
+                alt="Mesin produksi es kristal modern"
+              />
+            </div>
+            <div class="gallery-item">
+              <img
+                src="./src/assets/images/gallery-2.jpg"
+                alt="Es kristal dalam kemasan siap kirim"
+              />
+            </div>
+            <div class="gallery-item">
+              <img
+                src="./src/assets/images/gallery-3.jpg"
+                alt="Hasil es kristal yang jernih dan bersih"
+              />
+            </div>
+            <div class="gallery-item">
+              <img
+                src="./src/assets/images/gallery-4.jpg"
+                alt="Proses pengemasan es kristal yang higienis"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tentang">
+      <div class="container" data-aos="fade-up">
+        <h2 class="section-title">Lebih Dekat Dengan Raysa Es Kristal</h2>
+        <div class="about-layout">
+          <div class="about-image">
+            <img
+              id="about-us-image"
+              src=""
+              alt="Tim dan Produksi Raysa Es Kristal"
+            />
+          </div>
+          <div class="about-content">
+            <h3>Dari Dapur Kami, Untuk Kesegaran Anda</h3>
+            <p>
+              Raysa Es Kristal lahir dari komitmen untuk menyediakan es batu
+              yang tidak hanya mendinginkan, tetapi juga aman, bersih, dan
+              higienis. Setiap kristal es yang kami produksi melalui proses
+              filtrasi modern untuk menjamin kualitas terbaik sampai ke tangan
+              Anda. Kami hadir untuk menjadi solusi kesegaran terpercaya bagi
+              masyarakat.
+            </p>
+            <p style="margin-top: 1rem">
+              Kami melayani berbagai kebutuhan, mulai dari konsumsi rumah
+              tangga, pasokan untuk pedagang minuman, hingga kebutuhan acara
+              spesial Anda.
+            </p>
+            <a href="#kontak" class="btn-primary" style="margin-top: 1.5rem"
+              >Hubungi Kami</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section testimonials" data-aos="fade-up">
+      <div class="container">
+        <h2 class="section-title">Apa Kata Mereka?</h2>
+        <div class="testimonial-grid">
+          <div class="testimonial">
+            <div class="testimonial-text">
+              "Es kristalnya benar-benar jernih dan tahan lama. Kualitasnya
+              konsisten dan sangat cocok untuk bisnis minuman saya. Pengiriman
+              juga selalu tepat waktu."
+            </div>
+            <div class="stars">★★★★★</div>
+            <div class="testimonial-author">- Budi Santoso, Cafe XYZ</div>
+          </div>
+          <div class="testimonial">
+            <div class="testimonial-text">
+              "Pelayanan sangat memuaskan! Pesan untuk acara pernikahan dan
+              semua beres tanpa kendala. Sangat direkomendasikan untuk kebutuhan
+              acara."
+            </div>
+            <div class="stars">★★★★★</div>
+            <div class="testimonial-author">- Citra, Event Organizer</div>
+          </div>
+          <div class="testimonial">
+            <div class="testimonial-text">
+              "Anak-anak suka sekali bikin es teh di rumah. Pakai es dari Raysa
+              jadi lebih tenang karena tahu produknya higienis dan aman."
+            </div>
+            <div class="stars">★★★★☆</div>
+            <div class="testimonial-author">- Rina, Ibu Rumah Tangga</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer" id="kontak">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h4>Tautan Cepat</h4>
+            <ul>
+              <li><a href="#home">Beranda</a></li>
+              <li><a href="#keunggulan">Keunggulan</a></li>
+              <li><a href="#harga">Harga</a></li>
+              <li><a href="#produk">Galeri</a></li>
+              <li><a href="#tentang">Tentang Kami</a></li>
+              <li><a href="order.html">Pesan Sekarang</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h4>Hubungi Kami</h4>
+            <div class="contact-list">
+              <div class="contact-item">
+                <span class="contact-label">Penjualan (WhatsApp):</span>
+                <a
+                  href="https://wa.me/6281234567890"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="contact-link"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 16 16"
+                    width="20"
+                    height="20"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.068-.315-.099-.449.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.449-1.076-.612-1.47-.16-.389-.323-.335-.449-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"
+                    />
+                  </svg>
+                  <span>+62 812-3456-7890</span>
+                </a>
+              </div>
+
+              <div class="contact-item">
+                <span class="contact-label">Email:</span>
+                <a href="mailto:kontak@raysaeskristal.com" class="contact-link">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
+                    width="20"
+                    height="20"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H464c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zM48 96H464c8.8 0 16 7.2 16 16V141.2L294.6 256.2c-20.4 17-51.4 17-71.8 0L32 141.2V112c0-8.8 7.2-16 16-16zm416 33.1L317.4 240.2 464 165.2V129.1zM48 165.2L194.6 240.2 48 317.9V165.2zm0 200.7V384H464V365.9L317.4 263.8c-14.7-12.3-34.9-18.8-55.4-18.8s-40.7 6.5-55.4 18.8L48 365.9z"
+                    />
+                  </svg>
+                  <span>kontak@raysaeskristal.com</span>
+                </a>
+              </div>
+
+              <div class="contact-item">
+                <span class="contact-label">Sosial Media:</span>
+                <a
+                  href="https://www.instagram.com/NAMA_AKUN_ANDA"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="contact-link"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512"
+                    width="20"
+                    height="20"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9 26.3 26.2 58 34.4 93.9 36.2 37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"
+                    />
+                  </svg>
+                  <span>Instagram</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="footer-section footer-map-container">
+            <h4>Lokasi Kami</h4>
+            <div id="map-footer"></div>
+            <div class="operational-info" style="margin-top: 1rem">
+              <p><strong>Jam Layanan:</strong> 08:00 - 17:00 WIB</p>
+              <p>
+                <strong>Area Jangkauan:</strong> Cipaku, Ciamis, Kawali,
+                Panjalu, dan sekitarnya.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 Raysa Es Kristal. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+  </body>
+</html>
