@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Formulir Pemesanan - Raysa Es Kristal</title>
+    <meta
+      name="description"
+      content="Raysa Es Kristal menyediakan es kristal higienis dan tahan lama untuk kebutuhan rumah tangga, bisnis, dan acara di Ciamis, Cipaku, Kawali. Pesan sekarang, siap antar!"
+    />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -32,6 +36,20 @@
               required
             />
           </div>
+
+          <div class="form-group">
+            <label for="kecamatan">Kecamatan Pengiriman</label>
+            <div class="select-wrapper">
+              <select id="kecamatan" required>
+                <option value="">-- Pilih Kecamatan --</option>
+                <option value="Cipaku">Cipaku</option>
+                <option value="Ciamis">Ciamis</option>
+                <option value="Kawali">Kawali</option>
+                <option value="Panjalu">Panjalu</option>
+                <option value="Lainnya">Lainnya (Luar Jangkauan)</option>
+              </select>
+            </div>
+          </div>
           <div class="form-group">
             <label for="phone">Nomor WhatsApp</label>
             <input
@@ -58,6 +76,73 @@
               placeholder="Contoh: 5"
               required
             />
+          </div>
+
+          <div class="form-group">
+            <label>Metode Pembayaran</label>
+            <div class="payment-options">
+              <div class="payment-option">
+                <input
+                  type="radio"
+                  id="cod"
+                  name="payment-method"
+                  value="COD (Bayar di Tempat)"
+                  checked
+                />
+                <label for="cod">COD (Bayar di Tempat)</label>
+              </div>
+              <div class="payment-option">
+                <input
+                  type="radio"
+                  id="transfer"
+                  name="payment-method"
+                  value="Transfer Bank"
+                />
+                <label for="transfer">Transfer Bank</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Catatan Tambahan (Opsional)</label>
+            <textarea
+              id="notes"
+              rows="3"
+              placeholder="Contoh: Tolong antar sebelum jam 12 siang, atau jangan pakai kantong plastik."
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="location">Lokasi Spesifik </label>
+            <button
+              type="button"
+              id="get-location-btn"
+              class="btn-outline"
+              style="
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+              "
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 384 512"
+                width="16"
+                height="16"
+                fill="currentColor"
+              >
+                <path
+                  d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
+                />
+              </svg>
+              Ambil Lokasi Saat Ini
+            </button>
+            <p
+              id="location-feedback"
+              style="font-size: 0.9rem; margin-top: 0.75rem; text-align: center"
+            ></p>
           </div>
           <button type="submit" class="btn-primary">
             Lanjutkan ke WhatsApp
