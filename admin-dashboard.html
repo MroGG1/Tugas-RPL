@@ -184,8 +184,6 @@
           }
         }
 
-        
-
         // Memuat produk
         async function loadProducts() {
           try {
@@ -264,20 +262,20 @@
         }
 
         // Fungsi untuk logout
-  async function handleLogout() {
-    try {
-      // Menambahkan credentials: 'include' agar cookie sesi terkirim
-      await fetch('http://localhost:3000/api/logout', { 
-        method: 'POST', 
-        credentials: 'include' 
-      });
-      alert('Anda telah logout.');
-      window.location.href = '/admin.html';
-    } catch (error) {
-      console.error('Gagal logout:', error);
-      alert('Terjadi kesalahan saat logout.');
-    }
-  }
+        async function handleLogout() {
+          try {
+            // Menambahkan credentials: 'include' agar cookie sesi terkirim
+            await fetch("http://localhost:3000/api/logout", {
+              method: "POST",
+              credentials: "include",
+            });
+            alert("Anda telah logout.");
+            window.location.href = "/admin.html";
+          } catch (error) {
+            console.error("Gagal logout:", error);
+            alert("Terjadi kesalahan saat logout.");
+          }
+        }
 
         // Logout
         document
