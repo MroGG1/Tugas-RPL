@@ -25,7 +25,7 @@
 }
 
 .logo-image {
-  height: 50px; /* Atur tinggi logo */
+  height: 80px; /* Atur tinggi logo */
   width: auto;
   max-width: 200px;
 }
@@ -68,7 +68,7 @@
 .cta-button {
   background: #007bff;
   color: white;
-  padding: 0.8rem 1.5rem;
+  padding: 0.6rem 1.2rem;
   border-radius: 5px;
   text-decoration: none;
   font-weight: 600;

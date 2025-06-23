@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - Raysa Es Kristal</title>
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        padding: 1rem 2rem;
+        margin: 0;
+        background-color: #f8f9fa;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+      }
+      #logout-btn {
+        padding: 0.5rem 1rem;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      #logout-btn:hover {
+        background-color: #c82333;
+      }
+      .content {
+        max-width: 1200px;
+        margin: auto;
+      }
+      .product-manager {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 2rem;
+        align-items: flex-start;
+      }
+      .form-container,
+      .table-container {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      h2,
+      h3 {
+        color: #333;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 0.75rem;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .form-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .action-btn {
+        margin-right: 5px;
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        background-color: #eee;
+      }
+      .action-btn:hover {
+        background-color: #ddd;
+      }
+      @media (max-width: 768px) {
+        .product-manager {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1 id="welcome-message">Memuat...</h1>
+      <button id="logout-btn">Logout</button>
+    </div>
+
+    <div class="content">
+      <h2>Kelola Produk</h2>
+      <div class="product-manager">
+        <div class="form-container">
+          <h3 id="form-title">Tambah Produk Baru</h3>
+          <form id="product-form">
+            <input type="hidden" id="product-id" />
+            <div class="form-group">
+              <label for="product-name">Nama Produk</label>
+              <input type="text" id="product-name" required />
+            </div>
+            <div class="form-group">
+              <label for="product-description">Deskripsi</label>
+              <textarea id="product-description" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="product-price">Harga (contoh: 15000)</label>
+              <input type="number" id="product-price" required />
+            </div>
+            <div class="form-buttons">
+              <button type="submit" id="submit-btn">Simpan</button>
+              <button
+                type="button"
+                id="cancel-btn"
+                style="display: none; background-color: #6c757d"
+              >
+                Batal
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="table-container">
+          <h3>Daftar Produk</h3>
+          <table id="product-table">
+            <thead>
+              <tr>
+                <th>Nama Produk</th>
+                <th>Harga</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const productForm = document.getElementById("product-form");
+        const productTableBody = document.querySelector("#product-table tbody");
+        const formTitle = document.getElementById("form-title");
+        const productIdInput = document.getElementById("product-id");
+        const cancelBtn = document.getElementById("cancel-btn");
+
+        const API_URL = "http://localhost:3000/api/admin";
+
+        // Cek sesi login
+        async function fetchProfile() {
+          try {
+            const response = await fetch(`${API_URL}/profile`, {
+              credentials: "include",
+            });
+            if (!response.ok) throw new Error("Sesi tidak valid");
+            const data = await response.json();
+            document.getElementById(
+              "welcome-message"
+            ).textContent = `Selamat Datang, ${data.username}!`;
+          } catch (error) {
+            alert("Sesi Anda telah berakhir. Silakan login kembali.");
+            window.location.href = "/admin.html";
+          }
+        }
+
+        
+
+        // Memuat produk
+        async function loadProducts() {
+          try {
+            const response = await fetch(`${API_URL}/products`);
+            const products = await response.json();
+            productTableBody.innerHTML = "";
+            products.forEach((product) => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+              <td>${product.name}</td>
+              <td>Rp ${new Intl.NumberFormat("id-ID").format(
+                product.price
+              )}</td>
+              <td>
+                <button class="action-btn edit-btn">Edit</button>
+                <button class="action-btn delete-btn">Hapus</button>
+              </td>
+            `;
+              row
+                .querySelector(".edit-btn")
+                .addEventListener("click", () => editProduct(product));
+              row
+                .querySelector(".delete-btn")
+                .addEventListener("click", () => deleteProduct(product.id));
+              productTableBody.appendChild(row);
+            });
+          } catch (error) {
+            console.error("Gagal memuat produk:", error);
+          }
+        }
+
+        // Submit form (Create/Update)
+        productForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const id = productIdInput.value;
+          const productData = {
+            name: document.getElementById("product-name").value,
+            description: document.getElementById("product-description").value,
+            price: document.getElementById("product-price").value,
+          };
+          const isUpdating = !!id;
+          const url = isUpdating
+            ? `${API_URL}/products/${id}`
+            : `${API_URL}/products`;
+          const method = isUpdating ? "PUT" : "POST";
+          await fetch(url, {
+            method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(productData),
+          });
+          resetForm();
+          loadProducts();
+        });
+
+        function editProduct(product) {
+          formTitle.textContent = "Edit Produk";
+          productIdInput.value = product.id;
+          document.getElementById("product-name").value = product.name;
+          document.getElementById("product-description").value =
+            product.description;
+          document.getElementById("product-price").value = product.price;
+          cancelBtn.style.display = "inline-block";
+        }
+
+        async function deleteProduct(id) {
+          if (!confirm("Apakah Anda yakin ingin menghapus produk ini?")) return;
+          await fetch(`${API_URL}/products/${id}`, { method: "DELETE" });
+          loadProducts();
+        }
+
+        function resetForm() {
+          productForm.reset();
+          productIdInput.value = "";
+          formTitle.textContent = "Tambah Produk Baru";
+          cancelBtn.style.display = "none";
+        }
+
+        // Fungsi untuk logout
+  async function handleLogout() {
+    try {
+      // Menambahkan credentials: 'include' agar cookie sesi terkirim
+      await fetch('http://localhost:3000/api/logout', { 
+        method: 'POST', 
+        credentials: 'include' 
+      });
+      alert('Anda telah logout.');
+      window.location.href = '/admin.html';
+    } catch (error) {
+      console.error('Gagal logout:', error);
+      alert('Terjadi kesalahan saat logout.');
+    }
+  }
+
+        // Logout
+        document
+          .getElementById("logout-btn")
+          .addEventListener("click", async () => {
+            await fetch("http://localhost:3000/api/logout", { method: "POST" });
+            alert("Anda telah logout.");
+            window.location.href = "/admin.html";
+          });
+
+        // Inisialisasi
+        fetchProfile();
+        loadProducts();
+        cancelBtn.addEventListener("click", resetForm);
+      });
+    </script>
+  </body>
+</html>
