@@ -84,49 +84,6 @@
     </div>
 
     <script>
-      // Fungsi login
-      function login(username, password) {
-        fetch("/api/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include", // penting!
-          body: JSON.stringify({ username, password }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.success) {
-              // Login berhasil, ambil profile
-              fetchProfile();
-            } else {
-              alert("Login gagal");
-            }
-          });
-      }
-
-      // Fungsi ambil profile admin
-      function fetchProfile() {
-        fetch("http://localhost:9001/api/admin/profile", {
-          method: "GET",
-          credentials: "include", // penting!
-        })
-          .then((res) => {
-            if (res.status === 401) {
-              alert("Sesi Anda telah berakhir. Silakan login kembali.");
-              // Redirect ke halaman login jika perlu
-              return;
-            }
-            return res.json();
-          })
-          .then((profile) => {
-            if (profile) {
-              // Tampilkan data profile admin
-              console.log(profile);
-            }
-          });
-      }
-
       document
         .getElementById("login-form")
         .addEventListener("submit", async function (e) {
@@ -138,11 +95,12 @@
           errorMessage.textContent = "";
 
           try {
+            // PERBAIKAN DI SINI: Menggunakan path relatif
             const response = await fetch("/api/login", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ username, password }),
-              credentials: "include", // <-- WAJIB!
+              credentials: "include",
             });
 
             const result = await response.json();
@@ -150,7 +108,7 @@
             if (response.ok) {
               window.location.href = "/admin-dashboard.html";
             } else {
-              errorMessage.textContent = result.message;
+              errorMessage.textContent = result.message || "Login gagal";
             }
           } catch (error) {
             errorMessage.textContent =
@@ -161,9 +119,10 @@
       // Cek apakah admin sudah login saat halaman dimuat
       window.addEventListener("load", async function () {
         try {
-          const response = await fetch("http://localhost:9001/api/admin/profile", {
+          // PERBAIKAN DI SINI: Menggunakan path relatif
+          const response = await fetch("/api/profile", {
             method: "GET",
-            credentials: "include", // tambahkan ini!
+            credentials: "include",
           });
 
           if (response.ok) {
