@@ -408,7 +408,7 @@
 
     <script>
       // Ambil produk dari backend dan tampilkan
-      fetch("http://localhost:9001/api/products")
+      fetch("/api/products")
         .then(res => res.json())
         .then(produkList => {
           const container = document.getElementById("produk-list");

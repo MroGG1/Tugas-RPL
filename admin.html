@@ -86,7 +86,7 @@
     <script>
       // Fungsi login
       function login(username, password) {
-        fetch("http://localhost:9001/api/login", {
+        fetch("/api/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -138,7 +138,7 @@
           errorMessage.textContent = "";
 
           try {
-            const response = await fetch("http://localhost:9001/api/login", {
+            const response = await fetch("/api/login", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ username, password }),
