@@ -3,201 +3,145 @@
 // ----------------------------------------------------------------
 const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const session = require("express-session");
+const path = require("path");
 
 // ----------------------------------------------------------------
-// BAGIAN 2: INISIALISASI DATABASE SQLITE
-// ----------------------------------------------------------------
-const dbFile = "./raysa_eskristal.db";
-const db = new sqlite3.Database(dbFile, (err) => {
-  if (err) {
-    return console.error("Error saat membuka database:", err.message);
-  }
-
-  console.log("Berhasil terhubung ke database SQLite.");
-
-  // Menggunakan db.serialize untuk memastikan perintah dijalankan secara berurutan
-  db.serialize(() => {
-    // Membuat tabel 'admins' jika belum ada
-    db.run(
-      `CREATE TABLE IF NOT EXISTS admins (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      username TEXT UNIQUE NOT NULL,
-      password TEXT NOT NULL
-    )`,
-      (err) => {
-        if (err)
-          return console.error(
-            "Error saat membuat tabel 'admins':",
-            err.message
-          );
-
-        // Cek dan buat admin default jika belum ada
-        db.get("SELECT COUNT(*) as count FROM admins", [], async (err, row) => {
-          if (err)
-            return console.error("Error saat memeriksa admin:", err.message);
-
-          if (row.count === 0) {
-            try {
-              const salt = await bcrypt.genSalt(10);
-              const hashedPassword = await bcrypt.hash("admin123", salt);
-              db.run(
-                `INSERT INTO admins (username, password) VALUES (?, ?)`,
-                ["admin", hashedPassword],
-                (err) => {
-                  if (err)
-                    return console.error(
-                      "Error saat membuat admin default:",
-                      err.message
-                    );
-                  console.log(
-                    "Admin default berhasil dibuat. Username: 'admin', Password: 'admin123'"
-                  );
-                }
-              );
-            } catch (hashError) {
-              console.error("Error saat hashing password:", hashError);
-            }
-          }
-        });
-      }
-    );
-
-    // Membuat tabel 'products' jika belum ada
-    db.run(
-      `CREATE TABLE IF NOT EXISTS products (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        description TEXT,
-        price REAL NOT NULL
-    )`,
-      (err) => {
-        if (err)
-          return console.error(
-            "Error saat membuat tabel 'products':",
-            err.message
-          );
-      }
-    );
-  });
-});
-
-// ----------------------------------------------------------------
-// BAGIAN 3: KONFIGURASI SERVER EXPRESS
+// BAGIAN 2: INISIALISASI APP DAN MIDDLEWARE
 // ----------------------------------------------------------------
 const app = express();
-const port = 9001;
-
+app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:9001",
+    origin: "http://localhost:9000",
     credentials: true,
   })
 );
-app.use(express.json());
 app.use(
   session({
-    secret: "kunci-rahasia-yang-lebih-baik-dan-panjang",
+    secret: "rahasia", // ganti dengan secret Anda
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // Untuk development (HTTP). Ganti jadi 'true' di production (HTTPS)
-      maxAge: 1000 * 60 * 60 * 24, // Sesi berlaku 1 hari
+      secure: false,
+      sameSite: "lax",
     },
   })
 );
 
 // ----------------------------------------------------------------
-// BAGIAN 4: MIDDLEWARE & RUTE API
+// BAGIAN 3: INISIALISASI DATABASE
 // ----------------------------------------------------------------
-const checkAuth = (req, res, next) => {
-  if (!req.session.adminId) {
-    return res.status(401).json({ message: "Akses ditolak. Silakan login." });
+const db = new sqlite3.Database("./database.sqlite", (err) => {
+  if (err) {
+    console.error("Gagal koneksi ke database:", err.message);
+  } else {
+    console.log("Terhubung ke database SQLite.");
   }
-  next();
-};
+});
 
-// --- Rute Publik ---
+// Buat tabel produk jika belum ada
+db.run(`
+  CREATE TABLE IF NOT EXISTS products (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nama_produk TEXT NOT NULL,
+    harga INTEGER NOT NULL,
+    deskripsi TEXT
+  )
+`);
+
+// Buat tabel admin jika belum ada
+db.run(`
+  CREATE TABLE IF NOT EXISTS admin (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL
+  )
+`);
+
+// Tambahkan kode ini di bawah inisialisasi database di server.js, lalu jalankan server sekali
+const username = "admin";
+const password = "admin123";
+bcrypt.hash(password, 10, (err, hash) => {
+  if (err) return console.error(err);
+  db.run(
+    "INSERT OR IGNORE INTO admin (username, password) VALUES (?, ?)",
+    [username, hash],
+    function (err) {
+      if (err) return console.error(err);
+      console.log("Admin default berhasil ditambahkan!");
+    }
+  );
+});
+
+// ----------------------------------------------------------------
+// BAGIAN 4: ENDPOINT AUTENTIKASI ADMIN
+// ----------------------------------------------------------------
 app.post("/api/login", (req, res) => {
   const { username, password } = req.body;
-  const sql = "SELECT * FROM admins WHERE username = ?";
-  db.get(sql, [username], async (err, admin) => {
-    if (err) return res.status(500).json({ message: "Error server." });
-    if (!admin)
-      return res.status(404).json({ message: "Username tidak ditemukan." });
-
-    const isMatch = await bcrypt.compare(password, admin.password);
-    if (!isMatch) return res.status(400).json({ message: "Password salah." });
-
-    req.session.adminId = admin.id;
-    req.session.username = admin.username;
-    res.status(200).json({ message: "Login berhasil!" });
-  });
-});
-
-app.post("/api/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) return res.status(500).json({ message: "Gagal logout." });
-    res.clearCookie("connect.sid");
-    return res.status(200).json({ message: "Logout berhasil." });
-  });
-});
-
-// --- Rute Terlindungi ---
-app.get("/api/admin/profile", checkAuth, (req, res) => {
-  res
-    .status(200)
-    .json({ id: req.session.adminId, username: req.session.username });
-});
-
-// --- API CRUD Produk ---
-app.get("/api/admin/products", checkAuth, (req, res) => {
-  db.all("SELECT * FROM products ORDER BY id DESC", [], (err, rows) => {
+  db.get("SELECT * FROM admin WHERE username = ?", [username], (err, user) => {
     if (err)
-      return res.status(500).json({ message: "Gagal mengambil data produk." });
+      return res.status(500).json({ success: false, message: "Server error" });
+    if (!user)
+      return res.status(401).json({ success: false, message: "Username salah" });
+
+    // Jika password sudah di-hash, gunakan bcrypt.compare
+    bcrypt.compare(password, user.password, (err, result) => {
+      if (result) {
+        req.session.user = { id: user.id, username: user.username };
+        res.json({ success: true });
+      } else {
+        res.status(401).json({ success: false, message: "Password salah" });
+      }
+    });
+  });
+});
+
+app.get("/api/profile", (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  res.json({ username: req.session.user.username });
+});
+
+// ----------------------------------------------------------------
+// BAGIAN 5: ENDPOINT PRODUK
+// ----------------------------------------------------------------
+
+// Tambah produk (hanya admin)
+app.post("/api/products", (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  const { nama_produk, harga, deskripsi } = req.body;
+  db.run(
+    "INSERT INTO products (nama_produk, harga, deskripsi) VALUES (?, ?, ?)",
+    [nama_produk, harga, deskripsi],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ message: "Gagal menambah produk" });
+      }
+      res.json({ success: true, id: this.lastID });
+    }
+  );
+});
+
+// Ambil semua produk (untuk halaman utama)
+app.get("/api/products", (req, res) => {
+  db.all("SELECT * FROM products", [], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ message: "Gagal mengambil produk" });
+    }
     res.json(rows);
   });
 });
 
-app.post("/api/admin/products", checkAuth, (req, res) => {
-  const { name, description, price } = req.body;
-  db.run(
-    `INSERT INTO products (name, description, price) VALUES (?, ?, ?)`,
-    [name, description, price],
-    function (err) {
-      if (err)
-        return res.status(500).json({ message: "Gagal menyimpan produk." });
-      res.status(201).json({ id: this.lastID, name, description, price });
-    }
-  );
-});
-
-app.put("/api/admin/products/:id", checkAuth, (req, res) => {
-  const { name, description, price } = req.body;
-  db.run(
-    `UPDATE products SET name = ?, description = ?, price = ? WHERE id = ?`,
-    [name, description, price, req.params.id],
-    function (err) {
-      if (err)
-        return res.status(500).json({ message: "Gagal memperbarui produk." });
-      res.json({ message: "Produk berhasil diperbarui." });
-    }
-  );
-});
-
-app.delete("/api/admin/products/:id", checkAuth, (req, res) => {
-  db.run(`DELETE FROM products WHERE id = ?`, req.params.id, function (err) {
-    if (err)
-      return res.status(500).json({ message: "Gagal menghapus produk." });
-    res.json({ message: "Produk berhasil dihapus." });
-  });
-});
-
 // ----------------------------------------------------------------
-// BAGIAN 5: MENJALANKAN SERVER
+// BAGIAN 6: JALANKAN SERVER
 // ----------------------------------------------------------------
-app.listen(port, () => {
-  console.log(`Server backend berjalan di http://localhost:${port}`);
+const PORT = 9001;
+app.listen(PORT, () => {
+  console.log(`Server berjalan di http://localhost:${PORT}`);
 });

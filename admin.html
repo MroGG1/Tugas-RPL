@@ -84,6 +84,49 @@
     </div>
 
     <script>
+      // Fungsi login
+      function login(username, password) {
+        fetch("http://localhost:9001/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // penting!
+          body: JSON.stringify({ username, password }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success) {
+              // Login berhasil, ambil profile
+              fetchProfile();
+            } else {
+              alert("Login gagal");
+            }
+          });
+      }
+
+      // Fungsi ambil profile admin
+      function fetchProfile() {
+        fetch("http://localhost:9001/api/admin/profile", {
+          method: "GET",
+          credentials: "include", // penting!
+        })
+          .then((res) => {
+            if (res.status === 401) {
+              alert("Sesi Anda telah berakhir. Silakan login kembali.");
+              // Redirect ke halaman login jika perlu
+              return;
+            }
+            return res.json();
+          })
+          .then((profile) => {
+            if (profile) {
+              // Tampilkan data profile admin
+              console.log(profile);
+            }
+          });
+      }
+
       document
         .getElementById("login-form")
         .addEventListener("submit", async function (e) {
@@ -92,22 +135,21 @@
           const username = document.getElementById("username").value;
           const password = document.getElementById("password").value;
           const errorMessage = document.getElementById("error-message");
-          errorMessage.textContent = ""; // Kosongkan pesan error setiap kali submit
+          errorMessage.textContent = "";
 
           try {
-            const response = await fetch("http://localhost:3000/api/login", {
+            const response = await fetch("http://localhost:9001/api/login", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ username, password }),
+              credentials: "include", // <-- WAJIB!
             });
 
             const result = await response.json();
 
             if (response.ok) {
-              // Jika login berhasil, arahkan ke dashboard
               window.location.href = "/admin-dashboard.html";
             } else {
-              // Jika gagal, tampilkan pesan error dari server
               errorMessage.textContent = result.message;
             }
           } catch (error) {
@@ -115,6 +157,23 @@
               "Tidak dapat terhubung ke server. Pastikan server sudah berjalan.";
           }
         });
+
+      // Cek apakah admin sudah login saat halaman dimuat
+      window.addEventListener("load", async function () {
+        try {
+          const response = await fetch("http://localhost:9001/api/admin/profile", {
+            method: "GET",
+            credentials: "include", // tambahkan ini!
+          });
+
+          if (response.ok) {
+            // Jika sudah login, arahkan langsung ke dashboard
+            window.location.href = "/admin-dashboard.html";
+          }
+        } catch (error) {
+          console.error("Error checking admin login status:", error);
+        }
+      });
     </script>
   </body>
 </html>

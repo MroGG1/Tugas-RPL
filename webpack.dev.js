@@ -19,7 +19,7 @@ module.exports = merge(common, {
       directory: "./dist",
     },
     compress: true,
-    port: 9001,
+    port: 9000,
     open: true,
     hot: true, // Mengaktifkan Hot Module Replacement (HMR)
   },

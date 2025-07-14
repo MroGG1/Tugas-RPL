@@ -403,5 +403,30 @@
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script>
+    <h2>Daftar Produk</h2>
+    <div id="produk-list"></div>
+
+    <script>
+      // Ambil produk dari backend dan tampilkan
+      fetch("http://localhost:9001/api/products")
+        .then(res => res.json())
+        .then(produkList => {
+          const container = document.getElementById("produk-list");
+          if (!produkList || produkList.length === 0) {
+            container.innerHTML = "<p>Belum ada produk.</p>";
+            return;
+          }
+          container.innerHTML = produkList.map(p =>
+            `<div style="border:1px solid #ccc; margin:8px; padding:8px;">
+              <h3>${p.nama_produk}</h3>
+              <p>Harga: Rp${p.harga}</p>
+              <p>${p.deskripsi || ""}</p>
+            </div>`
+          ).join("");
+        })
+        .catch(() => {
+          document.getElementById("produk-list").innerHTML = "<p>Gagal memuat produk.</p>";
+        });
+    </script>
   </body>
 </html>
