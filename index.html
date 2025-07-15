@@ -408,7 +408,7 @@
 
     <script>
       // Ambil produk dari backend dan tampilkan
-      fetch("/api/products")
+      fetch("https://rpl-backend-production.up.railway.app/api/products")
         .then(res => res.json())
         .then(produkList => {
           const container = document.getElementById("produk-list");
