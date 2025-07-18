@@ -134,12 +134,32 @@
             <a href="order.html" class="btn-primary">Pesan Sekarang</a>
           </div>
 
-          <div class="card pricing-card featured">
+          <div class="card pricing-card featured" id="featured-product-card">
             <div class="featured-badge">Paling Laris</div>
             <h3>Paket Usaha</h3>
             <div class="price">
-              Rp 65.000<span class="per-item">/5 karung</span>
+              Rp <span id="featured-price">65.000</span
+              ><span class="per-item">/5 karung</span>
             </div>
+            <!-- Tambahan fitur ubah harga -->
+            <input
+              type="number"
+              id="featured-price-input"
+              style="margin: 0.5rem 0; width: 120px"
+              placeholder="Harga baru"
+            />
+            <button
+              id="featured-price-save"
+              class="btn-primary"
+              style="margin-bottom: 1rem"
+            >
+              Simpan Harga
+            </button>
+            <p
+              id="featured-price-feedback"
+              style="color: green; font-size: 0.9rem"
+            ></p>
+            <!-- End tambahan -->
             <p>Pasokan es kristal untuk pedagang minuman.</p>
             <ul>
               <li>✔ Harga lebih hemat</li>
@@ -409,31 +429,35 @@
     <script>
       // Ambil produk dari backend dan tampilkan
       fetch("https://rpl-backend-production.up.railway.app/api/products")
-        .then(res => res.json())
-        .then(produkList => {
+        .then((res) => res.json())
+        .then((produkList) => {
           const container = document.getElementById("produk-list");
           if (!produkList || produkList.length === 0) {
             container.innerHTML = "<p>Belum ada produk.</p>";
             return;
           }
-          container.innerHTML = produkList.map(p =>
-            `<div style="border:1px solid #ccc; margin:8px; padding:8px;">
+          container.innerHTML = produkList
+            .map(
+              (p) =>
+                `<div style="border:1px solid #ccc; margin:8px; padding:8px;">
               <h3>${p.nama_produk}</h3>
               <p>Harga: Rp${p.harga}</p>
               <p>${p.deskripsi || ""}</p>
             </div>`
-          ).join("");
+            )
+            .join("");
         })
         .catch(() => {
-          document.getElementById("produk-list").innerHTML = "<p>Gagal memuat produk.</p>";
+          document.getElementById("produk-list").innerHTML =
+            "<p>Gagal memuat produk.</p>";
         });
 
       // Contoh fungsi edit harga produk
       async function editProductPrice(productId, newPrice) {
         const response = await fetch(`/api/products/${productId}/price`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ price: newPrice })
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ price: newPrice }),
         });
         const result = await response.json();
         // Tampilkan notifikasi atau update UI sesuai hasil
@@ -442,13 +466,71 @@
       // Contoh fungsi aktif/nonaktifkan produk
       async function setProductActive(productId, isActive) {
         const response = await fetch(`/api/products/${productId}/active`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ active: isActive })
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ active: isActive }),
         });
         const result = await response.json();
         // Tampilkan notifikasi atau update UI sesuai hasil
       }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Ganti dengan ID produk Paket Usaha dari backend Anda
+        const PRODUCT_ID = 2; // Sesuaikan dengan id produk Paket Usaha
+
+        const priceSpan = document.getElementById("featured-price");
+        const priceInput = document.getElementById("featured-price-input");
+        const saveBtn = document.getElementById("featured-price-save");
+        const feedback = document.getElementById("featured-price-feedback");
+
+        // Ambil harga terbaru dari backend saat halaman dimuat
+        fetch("https://rpl-backend-production.up.railway.app/api/products")
+          .then((res) => res.json())
+          .then((products) => {
+            const featured = products.find((p) => p.id == PRODUCT_ID);
+            if (featured) {
+              priceSpan.textContent = new Intl.NumberFormat("id-ID").format(
+                featured.harga
+              );
+              priceInput.value = featured.harga;
+            }
+          });
+
+        saveBtn.addEventListener("click", async function () {
+          const newPrice = priceInput.value;
+          if (!newPrice || isNaN(newPrice) || newPrice <= 0) {
+            feedback.style.color = "red";
+            feedback.textContent = "Harga tidak valid!";
+            return;
+          }
+          feedback.textContent = "Menyimpan...";
+          feedback.style.color = "black";
+          try {
+            const res = await fetch(
+              `https://rpl-backend-production.up.railway.app/api/products/${PRODUCT_ID}/price`,
+              {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ price: newPrice }),
+              }
+            );
+            const result = await res.json();
+            if (result.success) {
+              priceSpan.textContent = new Intl.NumberFormat("id-ID").format(
+                newPrice
+              );
+              feedback.style.color = "green";
+              feedback.textContent = "Harga berhasil diubah!";
+            } else {
+              feedback.style.color = "red";
+              feedback.textContent = result.message || "Gagal mengubah harga.";
+            }
+          } catch (err) {
+            feedback.style.color = "red";
+            feedback.textContent = "Gagal terhubung ke server.";
+          }
+        });
+      });
     </script>
   </body>
 </html>
