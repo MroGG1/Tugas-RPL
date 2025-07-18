@@ -427,6 +427,8 @@
     <div id="produk-list"></div>
 
     <script>
+      const API_BASE_URL = "https://rpl-backend-production.up.railway.app";
+
       // Ambil produk dari backend dan tampilkan
       fetch("https://rpl-backend-production.up.railway.app/api/products")
         .then((res) => res.json())
@@ -454,10 +456,11 @@
 
       // Contoh fungsi edit harga produk
       async function editProductPrice(productId, newPrice) {
-        const response = await fetch(`/api/products/${productId}/price`, {
+        const response = await fetch(`${API_BASE_URL}/api/products/${productId}/price`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ price: newPrice }),
+          credentials: "include",
         });
         const result = await response.json();
         // Tampilkan notifikasi atau update UI sesuai hasil
@@ -465,10 +468,63 @@
 
       // Contoh fungsi aktif/nonaktifkan produk
       async function setProductActive(productId, isActive) {
-        const response = await fetch(`/api/products/${productId}/active`, {
+        const response = await fetch(`${API_BASE_URL}/api/products/${productId}/active`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ active: isActive }),
+          credentials: "include",
+        });
+        const result = await response.json();
+        // Tampilkan notifikasi atau update UI sesuai hasil
+      }
+
+      document.addEventListener("DOMContentLoaded", async function () {
+        const produkListDiv = document.getElementById("produk-list");
+        produkListDiv.innerHTML = "Memuat produk...";
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/products`);
+          const produkList = await response.json();
+
+          // Filter hanya produk yang aktif
+          const produkAktif = produkList.filter((produk) => produk.active);
+
+          // Tampilkan produk aktif
+          produkListDiv.innerHTML = produkAktif
+            .map(
+              (produk) => `
+        <div class="produk-card">
+          <h3>${produk.nama_produk}</h3>
+          <p>Harga: Rp${produk.harga}</p>
+          <p>${produk.deskripsi || ""}</p>
+        </div>
+      `
+            )
+            .join("");
+        } catch (error) {
+          produkListDiv.innerHTML = "Gagal memuat produk.";
+        }
+      });
+
+      // Contoh fungsi edit harga produk
+      async function editProductPrice(productId, newPrice) {
+        const response = await fetch(`${API_BASE_URL}/api/products/${productId}/price`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ price: newPrice }),
+          credentials: "include",
+        });
+        const result = await response.json();
+        // Tampilkan notifikasi atau update UI sesuai hasil
+      }
+
+      // Contoh fungsi aktif/nonaktifkan produk
+      async function setProductActive(productId, isActive) {
+        const response = await fetch(`${API_BASE_URL}/api/products/${productId}/active`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ active: isActive }),
+          credentials: "include",
         });
         const result = await response.json();
         // Tampilkan notifikasi atau update UI sesuai hasil

@@ -302,16 +302,13 @@
           }
         });
 
-        document
-          .getElementById("logout-btn")
-          .addEventListener("click", async () => {
-            await fetch(`${API_BASE_URL}/api/logout`, {
-              method: "POST",
-              credentials: "include",
-            });
-            alert("Anda telah logout.");
-            window.location.href = "/admin.html";
+        document.getElementById("logout-btn").addEventListener("click", async () => {
+          await fetch(`${API_BASE_URL}/api/logout`, {
+            method: "POST",
+            credentials: "include",
           });
+          window.location.href = "/admin.html";
+        });
 
         // Inisialisasi
         fetchProfile();
@@ -321,10 +318,11 @@
 
       // Fungsi edit harga produk
       function editProductPrice(productId, newPrice) {
-        fetch(`/api/products/${productId}/price`, {
+        fetch(`${API_BASE_URL}/api/products/${productId}/price`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ price: newPrice }),
+          credentials: "include",
         })
           .then((res) => res.json())
           .then((data) => {
@@ -334,10 +332,11 @@
 
       // Fungsi aktif/nonaktifkan produk
       function setProductActive(productId, isActive) {
-        fetch(`/api/products/${productId}/active`, {
+        fetch(`${API_BASE_URL}/api/products/${productId}/active`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ active: isActive }),
+          credentials: "include",
         })
           .then((res) => res.json())
           .then((data) => {
