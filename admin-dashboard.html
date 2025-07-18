@@ -248,26 +248,21 @@
             e.preventDefault();
             const formData = new FormData(this);
 
-            try {
-              const response = await fetch(`${API_BASE_URL}/api/products`, {
-                method: "POST",
-                body: formData,
-                credentials: "include",
-              });
+            const response = await fetch(`${API_BASE_URL}/api/products`, {
+              method: "POST",
+              body: formData,
+              credentials: "include",
+            });
 
-              if (response.ok) {
-                alert("Produk berhasil ditambahkan!");
-                this.reset();
-                // TODO: Refresh daftar produk jika perlu
-              } else {
-                const error = await response.json();
-                alert(
-                  "Gagal menambahkan produk: " +
-                    (error.message || "Unknown error")
-                );
-              }
-            } catch (err) {
-              alert("Terjadi kesalahan jaringan.");
+            if (response.ok) {
+              alert("Produk berhasil ditambahkan!");
+              this.reset();
+            } else {
+              const error = await response.json();
+              alert(
+                "Gagal menambahkan produk: " +
+                  (error.message || "Unknown error")
+              );
             }
           });
 
