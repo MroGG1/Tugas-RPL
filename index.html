@@ -427,6 +427,28 @@
         .catch(() => {
           document.getElementById("produk-list").innerHTML = "<p>Gagal memuat produk.</p>";
         });
+
+      // Contoh fungsi edit harga produk
+      async function editProductPrice(productId, newPrice) {
+        const response = await fetch(`/api/products/${productId}/price`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ price: newPrice })
+        });
+        const result = await response.json();
+        // Tampilkan notifikasi atau update UI sesuai hasil
+      }
+
+      // Contoh fungsi aktif/nonaktifkan produk
+      async function setProductActive(productId, isActive) {
+        const response = await fetch(`/api/products/${productId}/active`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ active: isActive })
+        });
+        const result = await response.json();
+        // Tampilkan notifikasi atau update UI sesuai hasil
+      }
     </script>
   </body>
 </html>

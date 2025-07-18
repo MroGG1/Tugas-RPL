@@ -93,6 +93,16 @@
         border: 1px solid #ccc;
         background-color: #eee;
       }
+      .pricing-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1.5rem;
+      }
+      .featured {
+        border: 2px solid #007bff;
+      }
       @media (max-width: 768px) {
         .product-manager {
           grid-template-columns: 1fr;
@@ -151,6 +161,27 @@
             <tbody></tbody>
           </table>
         </div>
+      </div>
+
+      <!-- Card Produk di dashboard admin -->
+      <div class="pricing-card featured" id="product-1">
+        <h3>Nama Produk</h3>
+        <label>
+          Harga:
+          <input
+            type="number"
+            value="12000"
+            onchange="editProductPrice(1, this.value)"
+          />
+        </label>
+        <label>
+          Aktif:
+          <input
+            type="checkbox"
+            checked
+            onchange="setProductActive(1, this.checked)"
+          />
+        </label>
       </div>
     </div>
 
@@ -287,6 +318,32 @@
         loadProducts();
         cancelBtn.addEventListener("click", resetForm);
       });
+
+      // Fungsi edit harga produk
+      function editProductPrice(productId, newPrice) {
+        fetch(`/api/products/${productId}/price`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ price: newPrice }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            alert(data.message);
+          });
+      }
+
+      // Fungsi aktif/nonaktifkan produk
+      function setProductActive(productId, isActive) {
+        fetch(`/api/products/${productId}/active`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ active: isActive }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            alert(data.message);
+          });
+      }
     </script>
   </body>
 </html>
