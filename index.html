@@ -185,8 +185,52 @@
     </section>
 
     <!-- Tambahkan di bawah section harga -->
-    <h2>Daftar Produk</h2>
-    <div id="produk-list"></div>
+    <h2 class="section-title" style="margin-top: 3rem">Daftar Produk</h2>
+    <div class="produk-grid" id="produk-list"></div>
+
+    <style>
+      .produk-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0 3rem 0;
+      }
+      .produk-card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+        padding: 1.5rem 1rem 1rem 1rem;
+        text-align: center;
+        transition: box-shadow 0.2s;
+        border: 1px solid #f0f0f0;
+      }
+      .produk-card img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        background: #f8f9fa;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+      }
+      .produk-card h3 {
+        font-size: 1.15rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #2d3a4a;
+      }
+      .produk-card p {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        color: #444;
+      }
+      .produk-card .produk-harga {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #007bff;
+        margin-bottom: 0.5rem;
+      }
+    </style>
 
     <section class="section gallery" id="produk" data-aos="fade-up">
       <div class="container">
@@ -499,19 +543,21 @@
           // Filter hanya produk yang aktif
           const produkAktif = produkList.filter((produk) => produk.active);
 
-          // Tampilkan produk aktif dengan gambar
+          // Tampilkan produk aktif dengan desain card
           produkListDiv.innerHTML = produkAktif
             .map(
               (produk) => `
-        <div class="produk-card">
-          <img src="${produk.gambar_url || "default-image.jpg"}" alt="${
+      <div class="produk-card">
+        <img src="${produk.gambar_url || "default-image.jpg"}" alt="${
                 produk.nama_produk
-              }" style="width:120px;height:auto;border-radius:8px;margin-bottom:8px;">
-          <h3>${produk.nama_produk}</h3>
-          <p>Harga: Rp${produk.harga}</p>
-          <p>${produk.deskripsi || ""}</p>
-        </div>
-      `
+              }">
+        <h3>${produk.nama_produk}</h3>
+        <div class="produk-harga">Rp${new Intl.NumberFormat("id-ID").format(
+          produk.harga
+        )}</div>
+        <p>${produk.deskripsi || ""}</p>
+      </div>
+    `
             )
             .join("");
         } catch (error) {
