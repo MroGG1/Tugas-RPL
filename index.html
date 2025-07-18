@@ -499,11 +499,14 @@
           // Filter hanya produk yang aktif
           const produkAktif = produkList.filter((produk) => produk.active);
 
-          // Tampilkan produk aktif
+          // Tampilkan produk aktif dengan gambar
           produkListDiv.innerHTML = produkAktif
             .map(
               (produk) => `
         <div class="produk-card">
+          <img src="${produk.gambar_url || "default-image.jpg"}" alt="${
+                produk.nama_produk
+              }" style="width:120px;height:auto;border-radius:8px;margin-bottom:8px;">
           <h3>${produk.nama_produk}</h3>
           <p>Harga: Rp${produk.harga}</p>
           <p>${produk.deskripsi || ""}</p>
