@@ -184,6 +184,10 @@
       </div>
     </section>
 
+    <!-- Tambahkan di bawah section harga -->
+    <h2>Daftar Produk</h2>
+    <div id="produk-list"></div>
+
     <section class="section gallery" id="produk" data-aos="fade-up">
       <div class="container">
         <h2 class="section-title">Galeri Produksi Kami</h2>
@@ -456,24 +460,30 @@
 
       // Contoh fungsi edit harga produk
       async function editProductPrice(productId, newPrice) {
-        const response = await fetch(`${API_BASE_URL}/api/products/${productId}/price`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ price: newPrice }),
-          credentials: "include",
-        });
+        const response = await fetch(
+          `${API_BASE_URL}/api/products/${productId}/price`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ price: newPrice }),
+            credentials: "include",
+          }
+        );
         const result = await response.json();
         // Tampilkan notifikasi atau update UI sesuai hasil
       }
 
       // Contoh fungsi aktif/nonaktifkan produk
       async function setProductActive(productId, isActive) {
-        const response = await fetch(`${API_BASE_URL}/api/products/${productId}/active`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ active: isActive }),
-          credentials: "include",
-        });
+        const response = await fetch(
+          `${API_BASE_URL}/api/products/${productId}/active`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ active: isActive }),
+            credentials: "include",
+          }
+        );
         const result = await response.json();
         // Tampilkan notifikasi atau update UI sesuai hasil
       }
@@ -508,24 +518,30 @@
 
       // Contoh fungsi edit harga produk
       async function editProductPrice(productId, newPrice) {
-        const response = await fetch(`${API_BASE_URL}/api/products/${productId}/price`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ price: newPrice }),
-          credentials: "include",
-        });
+        const response = await fetch(
+          `${API_BASE_URL}/api/products/${productId}/price`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ price: newPrice }),
+            credentials: "include",
+          }
+        );
         const result = await response.json();
         // Tampilkan notifikasi atau update UI sesuai hasil
       }
 
       // Contoh fungsi aktif/nonaktifkan produk
       async function setProductActive(productId, isActive) {
-        const response = await fetch(`${API_BASE_URL}/api/products/${productId}/active`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ active: isActive }),
-          credentials: "include",
-        });
+        const response = await fetch(
+          `${API_BASE_URL}/api/products/${productId}/active`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ active: isActive }),
+            credentials: "include",
+          }
+        );
         const result = await response.json();
         // Tampilkan notifikasi atau update UI sesuai hasil
       }

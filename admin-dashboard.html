@@ -302,13 +302,15 @@
           }
         });
 
-        document.getElementById("logout-btn").addEventListener("click", async () => {
-          await fetch(`${API_BASE_URL}/api/logout`, {
-            method: "POST",
-            credentials: "include",
+        document
+          .getElementById("logout-btn")
+          .addEventListener("click", async () => {
+            await fetch(`${API_BASE_URL}/api/logout`, {
+              method: "POST",
+              credentials: "include",
+            });
+            window.location.href = "/admin.html";
           });
-          window.location.href = "/admin.html";
-        });
 
         // Inisialisasi
         fetchProfile();
