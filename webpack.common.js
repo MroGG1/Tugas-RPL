@@ -3,13 +3,16 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
+  // Titik masuk utama untuk aplikasi Anda
   entry: {
     main: "./main.js",
   },
+  // Konfigurasi output
   output: {
     path: path.resolve(__dirname, "dist"),
     assetModuleFilename: "assets/images/[hash][ext][query]",
   },
+  // Aturan untuk berbagai jenis file
   module: {
     rules: [
       {
@@ -25,31 +28,36 @@ module.exports = {
       },
     ],
   },
+  // Konfigurasi plugin
   plugins: [
     new CleanWebpackPlugin(),
-    // Plugin untuk halaman utama
+
+    // Plugin untuk halaman utama (index.html)
     new HtmlWebpackPlugin({
       template: "./index.html",
       filename: "index.html",
-      chunks: ["main"],
+      chunks: ["main"], // Muat bundel 'main' (JS & CSS)
     }),
-    // Plugin untuk halaman pemesanan
+
+    // Plugin untuk halaman pemesanan (order.html)
     new HtmlWebpackPlugin({
       template: "./order.html",
       filename: "order.html",
-      chunks: ["main"],
+      chunks: ["main"], // Muat bundel 'main' (JS & CSS)
     }),
 
+    // Plugin untuk halaman login admin (admin.html)
     new HtmlWebpackPlugin({
-      template: "./admin.html", // File sumber
-      filename: "admin.html", // Nama file di output/browser
-      chunks: [], // Kosongkan karena script sudah ada di dalam filenya
+      template: "./admin.html",
+      filename: "admin.html",
+      chunks: ["main"], // PERBAIKAN: Muat bundel 'main' agar CSS ikut
     }),
-    // Plugin untuk halaman dashboard admin
+
+    // Plugin untuk halaman dashboard admin (admin-dashboard.html)
     new HtmlWebpackPlugin({
-      template: "./admin-dashboard.html", // File sumber
-      filename: "admin-dashboard.html", // Nama file di output/browser
-      chunks: [], // Kosongkan karena script sudah ada di dalam filenya
+      template: "./admin-dashboard.html",
+      filename: "admin-dashboard.html",
+      chunks: ["main"], // PERBAIKAN: Muat bundel 'main' agar CSS ikut
     }),
   ],
 };
