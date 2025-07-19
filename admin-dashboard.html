@@ -128,9 +128,7 @@
               <textarea id="deskripsi" name="deskripsi"></textarea>
             </div>
             <div class="form-group">
-              <label for="gambar_file" id="gambar_label"
-                >Upload Gambar Produk</label
-              >
+              <label for="gambar_file" id="gambar_label">Upload Gambar Produk</label>
               <input
                 type="file"
                 id="gambar_file"
@@ -141,9 +139,7 @@
             </div>
             <div class="form-buttons">
               <button type="submit">Simpan</button>
-              <button type="button" id="cancelBtn" style="display: none">
-                Batal
-              </button>
+              <button type="button" id="cancelBtn" style="display: none;">Batal</button>
             </div>
           </form>
         </div>
@@ -184,12 +180,10 @@
             });
             if (!response.ok) throw new Error("Sesi tidak valid");
             const data = await response.json();
-            document.getElementById(
-              "welcome-message"
-            ).textContent = `Selamat Datang, ${data.username}!`;
+            document.getElementById("welcome-message").textContent = `Selamat Datang, ${data.username}!`;
           } catch (error) {
             alert("Sesi Anda telah berakhir. Silakan login kembali.");
-            window.location.href = "admin.html"; // FIX: Changed from /admin.html
+            window.location.href = "admin.html";
           }
         }
 
@@ -206,19 +200,13 @@
               row.dataset.nama = product.nama_produk;
               row.dataset.harga = product.harga;
               row.dataset.deskripsi = product.deskripsi || "";
-
+              
               row.innerHTML = `
                 <td>${product.nama_produk}</td>
-                <td>Rp ${new Intl.NumberFormat("id-ID").format(
-                  product.harga
-                )}</td>
+                <td>Rp ${new Intl.NumberFormat("id-ID").format(product.harga)}</td>
                 <td>
-                  <button class="action-btn edit-btn" data-id="${
-                    product.id
-                  }">Edit</button>
-                  <button class="action-btn delete-btn" data-id="${
-                    product.id
-                  }">Hapus</button>
+                  <button class="action-btn edit-btn" data-id="${product.id}">Edit</button>
+                  <button class="action-btn delete-btn" data-id="${product.id}">Hapus</button>
                 </td>`;
               productTableBody.appendChild(row);
             });
@@ -233,7 +221,7 @@
           productIdInput.value = ""; // Kosongkan ID produk
           formTitle.textContent = "Tambah Produk Baru";
           cancelBtn.style.display = "none";
-
+          
           // Kembalikan input file ke keadaan normal
           gambarFileInput.disabled = false;
           gambarFileInput.required = true;
@@ -243,20 +231,18 @@
         // Fungsi untuk mengisi formulir dalam mode "Edit Produk"
         function enterEditMode(productRow) {
           formTitle.textContent = "Edit Produk";
-
+          
           // Ambil data dari dataset baris tabel
           productIdInput.value = productRow.dataset.id;
-          document.getElementById("nama_produk").value =
-            productRow.dataset.nama;
+          document.getElementById("nama_produk").value = productRow.dataset.nama;
           document.getElementById("harga").value = productRow.dataset.harga;
-          document.getElementById("deskripsi").value =
-            productRow.dataset.deskripsi;
-
+          document.getElementById("deskripsi").value = productRow.dataset.deskripsi;
+          
           // Nonaktifkan input file saat mengedit (karena API PUT tidak menanganinya)
           gambarFileInput.disabled = true;
           gambarFileInput.required = false; // Tidak wajib diisi saat edit
           gambarLabel.textContent = "Gambar tidak dapat diubah saat mengedit";
-
+          
           cancelBtn.style.display = "inline-block";
         }
 
@@ -268,13 +254,13 @@
               method: "DELETE",
               credentials: "include",
             });
-            if (response.ok) {
-              alert("Produk berhasil dihapus.");
-              loadProducts();
+            if(response.ok) {
+                alert("Produk berhasil dihapus.");
+                loadProducts();
             } else {
-              alert("Gagal menghapus produk.");
+                alert("Gagal menghapus produk.");
             }
-          } catch (error) {
+          } catch(error) {
             alert("Terjadi kesalahan: " + error.message);
           }
         }
@@ -294,9 +280,9 @@
             url = `${API_BASE_URL}/api/products/${productId}`;
             const formData = new FormData(productForm);
             const data = {
-              nama_produk: formData.get("nama_produk"),
-              harga: formData.get("harga"),
-              deskripsi: formData.get("deskripsi"),
+              nama_produk: formData.get('nama_produk'),
+              harga: formData.get('harga'),
+              deskripsi: formData.get('deskripsi'),
             };
 
             options = {
@@ -312,7 +298,7 @@
               alert("Anda wajib mengunggah gambar produk.");
               return;
             }
-
+            
             url = `${API_BASE_URL}/api/products`;
             options = {
               method: "POST",
@@ -327,17 +313,11 @@
             const result = await response.json();
 
             if (response.ok) {
-              alert(
-                isEditing
-                  ? "Produk berhasil diperbarui!"
-                  : "Produk berhasil ditambahkan!"
-              );
+              alert(isEditing ? "Produk berhasil diperbarui!" : "Produk berhasil ditambahkan!");
               resetForm();
               loadProducts();
             } else {
-              alert(
-                `Gagal: ${result.message || "Terjadi kesalahan pada server."}`
-              );
+              alert(`Gagal: ${result.message || 'Terjadi kesalahan pada server.'}`);
             }
           } catch (error) {
             alert("Tidak dapat terhubung ke server: " + error.message);
@@ -355,15 +335,13 @@
         });
 
         // Event listener untuk tombol logout
-        document
-          .getElementById("logout-btn")
-          .addEventListener("click", async () => {
-            await fetch(`${API_BASE_URL}/api/logout`, {
-              method: "POST",
-              credentials: "include",
-            });
-            window.location.href = "admin.html"; // FIX: Changed from /admin.html
+        document.getElementById("logout-btn").addEventListener("click", async () => {
+          await fetch(`${API_BASE_URL}/api/logout`, {
+            method: "POST",
+            credentials: "include",
           });
+          window.location.href = "admin.html";
+        });
 
         // Inisialisasi halaman
         fetchProfile();
