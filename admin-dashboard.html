@@ -111,7 +111,7 @@
       <div class="product-manager">
         <div class="form-container">
           <h3 id="form-title">Tambah Produk Baru</h3>
-          <form id="product-form" enctype="multipart/form-data">
+          <form id="product-form">
             <!-- Input tersembunyi untuk menyimpan ID saat mode edit -->
             <input type="hidden" id="product-id" name="id" />
 
@@ -126,15 +126,6 @@
             <div class="form-group">
               <label for="deskripsi">Deskripsi</label>
               <textarea id="deskripsi" name="deskripsi"></textarea>
-            </div>
-            <div class="form-group">
-              <label for="gambar_file" id="gambar_label">Upload Gambar Produk</label>
-              <input
-                type="file"
-                id="gambar_file"
-                name="gambar_file"
-                accept="image/*"
-              />
             </div>
             <div class="form-buttons">
               <button type="submit">Simpan</button>
@@ -168,10 +159,7 @@
         const formTitle = document.getElementById("form-title");
         const productIdInput = document.getElementById("product-id");
         const cancelBtn = document.getElementById("cancelBtn");
-        const gambarFileInput = document.getElementById("gambar_file");
-        const gambarLabel = document.getElementById("gambar_label");
 
-        // Fungsi untuk memeriksa sesi admin
         async function fetchProfile() {
           try {
             const response = await fetch(`${API_BASE_URL}/api/profile`, {
@@ -186,7 +174,6 @@
           }
         }
 
-        // Fungsi untuk memuat semua produk dan menampilkannya di tabel
         async function loadProducts() {
           try {
             const response = await fetch(`${API_BASE_URL}/api/products`);
@@ -194,7 +181,6 @@
             productTableBody.innerHTML = "";
             products.forEach((product) => {
               const row = document.createElement("tr");
-              // Simpan semua data produk di dataset untuk mode edit
               row.dataset.id = product.id;
               row.dataset.nama = product.nama_produk;
               row.dataset.harga = product.harga;
@@ -214,38 +200,22 @@
           }
         }
 
-        // Fungsi untuk mereset formulir ke mode "Tambah Produk"
         function resetForm() {
           productForm.reset();
-          productIdInput.value = ""; // Kosongkan ID produk
+          productIdInput.value = "";
           formTitle.textContent = "Tambah Produk Baru";
           cancelBtn.style.display = "none";
-          
-          // Kembalikan input file ke keadaan normal
-          gambarFileInput.disabled = false;
-          gambarFileInput.required = true;
-          gambarLabel.textContent = "Upload Gambar Produk";
         }
 
-        // Fungsi untuk mengisi formulir dalam mode "Edit Produk"
         function enterEditMode(productRow) {
           formTitle.textContent = "Edit Produk";
-          
-          // Ambil data dari dataset baris tabel
           productIdInput.value = productRow.dataset.id;
           document.getElementById("nama_produk").value = productRow.dataset.nama;
           document.getElementById("harga").value = productRow.dataset.harga;
           document.getElementById("deskripsi").value = productRow.dataset.deskripsi;
-          
-          // Nonaktifkan input file saat mengedit (karena API PUT tidak menanganinya)
-          gambarFileInput.disabled = true;
-          gambarFileInput.required = false; // Tidak wajib diisi saat edit
-          gambarLabel.textContent = "Gambar tidak dapat diubah saat mengedit";
-          
           cancelBtn.style.display = "inline-block";
         }
 
-        // Fungsi untuk menghapus produk
         async function deleteProduct(id) {
           if (!confirm("Apakah Anda yakin ingin menghapus produk ini?")) return;
           try {
@@ -264,51 +234,30 @@
           }
         }
 
-        // --- EVENT LISTENER UTAMA UNTUK FORM SUBMIT ---
         productForm.addEventListener("submit", async function (e) {
           e.preventDefault();
 
           const productId = productIdInput.value;
-          const isEditing = !!productId; // true jika ada ID, false jika tidak
+          const isEditing = !!productId;
 
-          let url;
-          let options;
+          const formData = new FormData(productForm);
+          const data = {
+            nama_produk: formData.get('nama_produk'),
+            harga: formData.get('harga'),
+            deskripsi: formData.get('deskripsi'),
+          };
 
-          if (isEditing) {
-            // --- LOGIKA UNTUK EDIT (PUT) ---
-            url = `${API_BASE_URL}/api/products/${productId}`;
-            const formData = new FormData(productForm);
-            const data = {
-              nama_produk: formData.get('nama_produk'),
-              harga: formData.get('harga'),
-              deskripsi: formData.get('deskripsi'),
-            };
+          const url = isEditing ? `${API_BASE_URL}/api/products/${productId}` : `${API_BASE_URL}/api/products`;
+          const method = isEditing ? "PUT" : "POST";
 
-            options = {
-              method: "PUT",
+          try {
+            const response = await fetch(url, {
+              method: method,
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(data),
               credentials: "include",
-            };
-          } else {
-            // --- LOGIKA UNTUK TAMBAH (POST) ---
-            // Validasi file di sisi klien
-            if (gambarFileInput.files.length === 0) {
-              alert("Anda wajib mengunggah gambar produk.");
-              return;
-            }
+            });
             
-            url = `${API_BASE_URL}/api/products`;
-            options = {
-              method: "POST",
-              body: new FormData(productForm),
-              credentials: "include",
-            };
-          }
-
-          // Kirim permintaan ke server
-          try {
-            const response = await fetch(url, options);
             const result = await response.json();
 
             if (response.ok) {
@@ -323,7 +272,6 @@
           }
         });
 
-        // Event delegation untuk tombol di dalam tabel
         productTableBody.addEventListener("click", (e) => {
           if (e.target.classList.contains("edit-btn")) {
             enterEditMode(e.target.closest("tr"));
@@ -333,7 +281,6 @@
           }
         });
 
-        // Event listener untuk tombol logout
         document.getElementById("logout-btn").addEventListener("click", async () => {
           await fetch(`${API_BASE_URL}/api/logout`, {
             method: "POST",
@@ -342,7 +289,6 @@
           window.location.href = "admin.html";
         });
 
-        // Inisialisasi halaman
         fetchProfile();
         loadProducts();
         cancelBtn.addEventListener("click", resetForm);
