@@ -246,6 +246,12 @@
           .getElementById("product-form")
           .addEventListener("submit", async function (e) {
             e.preventDefault();
+            const gambarFile = document.getElementById("gambar_file").files[0];
+            if (!gambarFile) {
+              alert("Anda wajib mengunggah gambar produk.");
+              return; // Menghentikan pengiriman formulir jika tidak ada gambar
+            }
+
             const formData = new FormData(this);
 
             const response = await fetch(`${API_BASE_URL}/api/products`, {
